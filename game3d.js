@@ -36,12 +36,14 @@ function makeCorridor(){
     if(Math.abs(z)%24<1){box(9.2,.24,.3,steel,0,4.48,z);box(.25,4.7,.28,steel,-4.26,2.2,z);box(.25,4.7,.28,steel,4.26,2.2,z);}
     if(Math.abs(z)%16<1){const puddle = new THREE.Mesh(new THREE.CircleGeometry(1.1+Math.random(),20),wet);puddle.rotation.x=-Math.PI/2;puddle.position.set((Math.random()-.5)*4,0.015,z+(Math.random()-.5)*5);scene.add(puddle)}
   }
+  stoneCladding();
   for(let z=2; z>-220; z-=18) lamp(z, z%36===0?0xffd59a:0xa9cbe0);
   for(let z=-20;z>-210;z-=28) debris(z);
-  [[-2.7,-28],[2.7,-47],[-2.8,-68],[2.8,-91],[-2.8,-121],[2.8,-148],[-2.7,-177]].forEach(([x,z])=>cover(x,z));
+  [[-2.7,-28],[2.7,-47],[-2.8,-68],[2.8,-91],[-2.8,-121],[2.8,-148],[-2.7,-177]].forEach(([x,z],i)=>cover(x,z,i));
   const door = box(5.8,4.4,.35,steel,0,2.18,-222); door.material = new THREE.MeshStandardMaterial({color:0x202823,metalness:.7,roughness:.36});
   box(6.5,.36,.65,concreteDark,0,4.42,-222); box(.48,4.6,.65,concreteDark,-3.15,2.25,-222); box(.48,4.6,.65,concreteDark,3.15,2.25,-222);
 }
+function stoneCladding(){const rows=6,segments=58,count=rows*segments*2;const blocks=new THREE.InstancedMesh(new THREE.BoxGeometry(.14,.52,1.65),new THREE.MeshStandardMaterial({color:0x6a7168,map:stoneMap,roughness:1}),count);const d=new THREE.Object3D();let i=0;for(const side of [-1,1])for(let z=10;z>-222;z-=4)for(let row=0;row<rows;row++){d.position.set(side*4.285,.34+row*.72,z+(row%2?-.35:.35));d.rotation.y=(Math.random()-.5)*.06;d.rotation.z=(Math.random()-.5)*.035;d.scale.set(.65+Math.random()*.8,.72+Math.random()*.45,.72+Math.random()*.5);d.updateMatrix();blocks.setMatrixAt(i++,d.matrix)}blocks.instanceMatrix.needsUpdate=true;blocks.castShadow=true;blocks.receiveShadow=true;scene.add(blocks)}
 function lamp(z,color){
   const fixture=box(.35,.3,.45,steel,2.9,3.62,z); const bulb = new THREE.Mesh(new THREE.SphereGeometry(.09,12,8),new THREE.MeshStandardMaterial({color,emissive:color,emissiveIntensity:2.4}));bulb.position.set(2.9,3.4,z);scene.add(bulb);
   const light=new THREE.PointLight(color,4.8,20,1.65);light.position.copy(bulb.position);scene.add(light);
@@ -50,11 +52,12 @@ function debris(z){
   box(.9,.75,.65,wood,-2.9+Math.random()*1.3,.4,z+(Math.random()-.5)*3); box(.55,.38,.9,wood,2.6-Math.random(),.22,z-3);
   for(let i=0;i<3;i++){ const sack=new THREE.Mesh(new THREE.SphereGeometry(.35,12,8),new THREE.MeshStandardMaterial({color:0x625f4d,roughness:1}));sack.scale.set(1.5,.58,1);sack.position.set(-3.55,i*.31+.25,z+1);sack.castShadow=true;scene.add(sack); }
 }
-function cover(x,z){
+function cover(x,z,kind){
   coverZones.push(new THREE.Vector3(x,0,z));
-  box(1.45,.78,.72,wood,x,.39,z);box(.72,.55,.72,wood,x+(x<0?.5:-.5),1.03,z+.1);
-  for(let i=0;i<4;i++){const sack=new THREE.Mesh(new THREE.SphereGeometry(.34,12,8),new THREE.MeshStandardMaterial({color:0x77705a,roughness:1}));sack.scale.set(1.45,.62,1);sack.position.set(x+(i%2?-.42:.42),.28+Math.floor(i/2)*.28,z-.62);sack.castShadow=true;sack.receiveShadow=true;scene.add(sack)}
-  const plate=box(.12,1.12,1.25,steel,x+(x<0?.82:-.82),.56,z-.05);plate.rotation.z=x<0?-.12:.12;
+  if(kind%3===0){for(let i=0;i<9;i++){const sack=new THREE.Mesh(new THREE.SphereGeometry(.34,12,8),new THREE.MeshStandardMaterial({color:0x77705a,roughness:1}));sack.scale.set(1.48,.62,1);sack.position.set(x+(i%3-1)*.43,.24+Math.floor(i/3)*.27,z+(i%2?-.2:.2));sack.rotation.y=(Math.random()-.5)*.25;sack.castShadow=true;sack.receiveShadow=true;scene.add(sack)}}
+  else if(kind%3===1){box(1.35,.72,.78,wood,x,.36,z);const top=box(.92,.65,.74,wood,x+(x<0?.38:-.38),1.02,z+.15);top.rotation.z=x<0?-.13:.13;const side=box(.62,.54,.7,wood,x-(x<0?.5:-.5),.28,z-.6);side.rotation.y=.22;}
+  else {for(let i=0;i<3;i++){const drum=new THREE.Mesh(new THREE.CylinderGeometry(.29,.29,.82,16),new THREE.MeshStandardMaterial({color:i===1?0x8d6434:0x485c58,metalness:.55,roughness:.42}));drum.rotation.z=Math.PI/2+(i-1)*.12;drum.position.set(x+(i-1)*.38,.36,z+(i%2?-.25:.25));drum.castShadow=true;scene.add(drum)}box(.95,.58,.72,wood,x+(x<0?.3:-.3),.29,z-.62);}
+  const plate=box(.12,1.12,1.25,steel,x+(x<0?.88:-.88),.56,z-.05);plate.rotation.z=x<0?-.18:.18;
 }
 function makeSoldier(color, enemy){
   const g=new THREE.Group(); const cloth=new THREE.MeshStandardMaterial({color,roughness:.88}); const leather=new THREE.MeshStandardMaterial({color:0x35271c,roughness:.76}); const skin=new THREE.MeshStandardMaterial({color:0xa97a5e,roughness:.9});
@@ -62,6 +65,7 @@ function makeSoldier(color, enemy){
   const coat=new THREE.Mesh(new THREE.CylinderGeometry(.58,.48,1.45,12),cloth);coat.position.y=1.73;coat.castShadow=true;g.add(coat);
   const belt=new THREE.Mesh(new THREE.TorusGeometry(.5,.045,8,18),leather);belt.rotation.x=Math.PI/2;belt.position.y=1.43;g.add(belt);
   const head=new THREE.Mesh(new THREE.SphereGeometry(.31,14,10),skin);head.position.y=2.55;g.add(head);
+  if(enemy){const eyeMat=new THREE.MeshStandardMaterial({color:0x171411,roughness:.7});const eyeL=new THREE.Mesh(new THREE.SphereGeometry(.035,8,6),eyeMat),eyeR=eyeL.clone();eyeL.position.set(-.105,2.58,-.29);eyeR.position.set(.105,2.58,-.29);const nose=new THREE.Mesh(new THREE.ConeGeometry(.045,.13,6),skin);nose.rotation.x=Math.PI/2;nose.position.set(0,2.5,-.325);g.add(eyeL,eyeR,nose);}
   const helmet=new THREE.Mesh(new THREE.SphereGeometry(.43,16,10,0,Math.PI*2,0,Math.PI*.65),steel);helmet.position.y=2.72;helmet.scale.z=1.12;g.add(helmet);
   const armL=new THREE.Mesh(new THREE.CylinderGeometry(.12,.16,.82,8),cloth),armR=armL.clone();armL.position.set(-.43,2.0,-.18);armR.position.set(.43,2.0,-.18);armL.rotation.z=-.72;armR.rotation.z=.72;armL.rotation.x=enemy?-.62:0;armR.rotation.x=enemy?-.62:0;g.add(armL,armR);
   const gun=new THREE.Mesh(new THREE.BoxGeometry(.13,.13,1.78),wood);gun.position.set(enemy?.04:0,enemy?2.02:1.92,enemy?-.56:-.62);gun.rotation.x=enemy?-.78:0;g.add(gun);
@@ -78,7 +82,7 @@ function reset(){
 function sync(){ui.health.style.width=health+'%';ui.healthText.textContent=Math.ceil(health);ui.ammo.textContent=ammo;ui.capture.style.width=(phase===1?hold/3:phase===3?hold/10:0)*100+'%';}
 function hurt(n){health=Math.max(0,health-n);document.querySelector('#hitFlash').style.opacity='.8';setTimeout(()=>document.querySelector('#hitFlash').style.opacity='0',95);if(health<=0)finish(false)}
 function finish(win){running=false;ui.endKicker.textContent=win?'任务完成':'防线失守';ui.endTitle.textContent=win?'沃堡暂时守住':'沃堡甬道失守';ui.endText.textContent=win?'你已夺回弹药库并守住铁门。':'重新部署，利用甬道纵深和掩体推进。';ui.end.classList.remove('is-hidden')}
-function marker(){ return phase===3?new THREE.Vector3(0,0,-7):new THREE.Vector3(0,0,-112); }
+function marker(){ return phase===3?new THREE.Vector3(0,0,-216):new THREE.Vector3(0,0,-112); }
 const flare=new THREE.PointLight(0xe7ad5c,3.2,12,2);scene.add(flare); const flareOrb=new THREE.Mesh(new THREE.SphereGeometry(.14,12,8),new THREE.MeshStandardMaterial({color:0xf0c479,emissive:0xe6813d,emissiveIntensity:3}));scene.add(flareOrb);
 function update(dt,time){
   if(!running)return;const forward=(keys.KeyW||keys.ArrowUp?1:0)-(keys.KeyS||keys.ArrowDown?1:0)+joy.z;const side=(keys.KeyD||keys.ArrowRight?1:0)-(keys.KeyA||keys.ArrowLeft?1:0)+joy.x;const moving=Math.abs(forward)+Math.abs(side)>.05;const speed=(keys.ShiftLeft?5.5:3.4)*dt;
@@ -86,7 +90,7 @@ function update(dt,time){
   const m=marker();flare.position.set(m.x,1.55,m.z);flareOrb.position.copy(flare.position);flareOrb.position.y+=Math.sin(time*4)*.14;
   const close=player.position.distanceTo(m)<2.2;
   if(phase===1){if(close){hold=Math.min(3,hold+dt);ui.guide.textContent='正在夺回弹药库……';}else{hold=Math.max(0,hold-dt);ui.guide.textContent='前进至金色信号火焰，夺回弹药库。';}if(hold>=3){phase=2;hold=0;ui.objective.textContent='02 · 肃清西侧甬道';ui.guide.textContent='使用准星射击所有敌军。';}}
-  else if(phase===2){const left=enemies.filter(e=>e.alive).length;ui.objective.textContent=`02 · 肃清西侧甬道（${left}）`;if(!left){phase=3;hold=0;ui.objective.textContent='03 · 守住最后铁门';ui.guide.textContent='退回铁门的金色信号处，坚持 10 秒。';spawnEnemy(-2,-56);spawnEnemy(2,-68);}}
+  else if(phase===2){const left=enemies.filter(e=>e.alive).length;ui.objective.textContent=`02 · 肃清西侧甬道（${left}）`;if(!left){phase=3;hold=0;ui.objective.textContent='03 · 守住最后铁门';ui.guide.textContent='继续向前抵达甬道尽头的铁门，坚持 10 秒。';spawnEnemy(-2.2,-151);spawnEnemy(2.2,-180);}}
   else if(close){hold=Math.min(10,hold+dt);ui.guide.textContent=`坚守铁门：${Math.ceil(10-hold)} 秒`;if(hold>=10)finish(true)}
   enemies.filter(e=>e.alive).forEach(e=>{const d=e.g.position.distanceTo(player.position);if(time>e.nextMove){e.wander.set(THREE.MathUtils.clamp(e.anchor.x+(Math.random()-.5)*2.1,-3.45,3.45),0,e.anchor.z+(Math.random()-.5)*4.6);e.nextMove=time+1.15+Math.random()*1.6;}e.g.position.lerp(e.wander,.42*dt);e.g.lookAt(player.position.x,1.6,player.position.z);e.body.position.y=Math.sin(time*7+e.seed)*.055;if(d<38&&time>e.shot&&time>volley){enemyFire(e,time);volley=time+1.7+Math.random()*.8;}});
   for(let i=tracers.length-1;i>=0;i--){const t=tracers[i];t.life-=dt;t.line.material.opacity=Math.max(0,t.life/.22);if(t.life<=0){scene.remove(t.line);tracers.splice(i,1);}}
