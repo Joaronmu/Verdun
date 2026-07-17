@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#101411">
+    <title>凡尔登：沃堡守备战</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main id="gameShell" aria-label="凡尔登：沃堡守备战试玩版">
+      <canvas id="game" aria-label="沃堡战场"></canvas>
+
+      <div id="guide" role="status"><b>行动指引</b><span id="guideText">向金色目标标记移动。</span></div>
+
+      <section id="hud" aria-label="战斗信息">
+        <div class="hud-top">
+          <div class="brand"><span>VERDUN</span><strong>沃堡守备战</strong></div>
+          <div class="objective"><span>目标</span><strong id="objectiveText">夺回 · 弹药库</strong><i><b id="captureFill"></b></i></div>
+          <button id="viewButton" class="view-button" type="button" aria-label="切换视角">第一人称</button>
+        </div>
+        <div class="hud-bottom">
+          <div class="vital"><img class="portrait" src="assets/french-poilu.png" alt="1916 年法军步兵"><span>生命</span><div><b id="healthFill"></b></div><strong id="healthText">100</strong></div>
+          <div class="ammo"><span>勒贝尔步枪</span><strong><b id="ammoText">5</b> / 25</strong></div>
+          <div class="status" id="statusText">雨水敲击着沃堡的石墙。</div>
+        </div>
+      </section>
+
+      <div id="crosshair" aria-hidden="true"></div>
+      <div id="hitFlash" aria-hidden="true"></div>
+
+      <section id="touchControls" aria-label="触摸控制">
+        <div id="joystick" class="joystick" role="application" aria-label="移动摇杆"><i id="stick"></i></div>
+        <button id="fireButton" class="fire" type="button">射击</button>
+        <button id="reloadButton" class="reload" type="button">装填</button>
+      </section>
+
+      <section id="intro" class="overlay">
+        <div class="intro-card">
+          <p class="eyebrow">1916 · 凡尔登</p>
+          <h1>沃堡守备战</h1>
+          <p>暴雨后的堡垒甬道已被敌军渗透。夺回弹药库、肃清西侧甬道，再守住最后一道铁门。</p>
+          <div class="missions"><b>01 夺回弹药库</b><b>02 肃清西侧甬道</b><b>03 守住铁门</b></div>
+          <div class="brief"><span>移动</span><b>WASD / 左侧摇杆</b><span>瞄准与射击</span><b>鼠标 / 右侧按钮</b></div>
+          <button id="startButton" type="button">进入沃堡</button>
+        </div>
+      </section>
+
+      <section id="end" class="overlay is-hidden" aria-live="polite">
+        <div class="intro-card">
+          <p class="eyebrow" id="endKicker">任务结束</p>
+          <h1 id="endTitle">沃堡得以守住</h1>
+          <p id="endText"></p>
+          <button id="restartButton" type="button">重新部署</button>
+        </div>
+      </section>
+    </main>
+    <script src="game.js"></script>
+  </body>
+</html>
