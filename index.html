@@ -9,7 +9,7 @@
   </head>
   <body>
     <main id="gameShell" aria-label="凡尔登：沃堡守备战试玩版">
-      <canvas id="game" aria-label="沃堡战场"></canvas>
+      <canvas id="game" aria-label="沃堡战场。桌面端点击画面锁定鼠标并转动视角；移动端在画面右侧滑动瞄准。"></canvas>
 
       <div id="guide" role="status"><b>行动指引</b><span id="guideText">向金色目标标记移动。</span></div>
 
@@ -21,12 +21,13 @@
         </div>
         <div class="hud-bottom">
           <div class="vital"><img class="portrait" src="assets/french-poilu.png" alt="1916 年法军步兵"><span>生命</span><div><b id="healthFill"></b></div><strong id="healthText">100</strong></div>
-          <div class="ammo"><span>勒贝尔步枪</span><strong><b id="ammoText">5</b> / 25</strong></div>
+          <div class="ammo"><span>勒贝尔步枪</span><strong><b id="ammoText">5</b> <em>/ <i id="reserveText">25</i></em></strong><small id="reloadState">可射击</small></div>
           <div class="status" id="statusText">雨水敲击着沃堡的石墙。</div>
         </div>
       </section>
 
       <div id="crosshair" aria-hidden="true"></div>
+      <div id="pitchMeter" aria-label="瞄准仰角"><i id="pitchNeedle"></i><span>仰角</span></div>
       <div id="hitFlash" aria-hidden="true"></div>
 
       <section id="touchControls" aria-label="触摸控制">
@@ -41,7 +42,7 @@
           <h1>沃堡守备战</h1>
           <p>暴雨后的堡垒甬道已被敌军渗透。夺回弹药库、肃清西侧甬道，再守住最后一道铁门。</p>
           <div class="missions"><b>01 夺回弹药库</b><b>02 肃清西侧甬道</b><b>03 守住铁门</b></div>
-          <div class="brief"><span>移动</span><b>WASD / 左侧摇杆</b><span>瞄准与射击</span><b>鼠标 / 右侧按钮</b></div>
+          <div class="brief"><span>移动</span><b>WASD / 左侧摇杆</b><span>瞄准与射击</span><b>鼠标转向 + 左键 / 右侧滑动 + 射击<br>Q / E 微调仰角</b></div>
           <button id="startButton" type="button">进入沃堡</button>
         </div>
       </section>
