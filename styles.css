@@ -34,7 +34,11 @@ button { font:inherit; color:inherit; border:0; cursor:pointer; touch-action:man
 #pitchMeter:before { content:""; position:absolute; left:-4px; top:50%; width:7px; height:1px; background:#eadfc8; box-shadow:0 -28px 0 rgba(234,223,200,.55),0 28px 0 rgba(234,223,200,.55); }
 #pitchMeter i { position:absolute; left:-7px; top:50%; width:13px; height:3px; background:#e8b66c; box-shadow:0 0 8px rgba(213,139,66,.7); transform:translateY(-50%); transition:top .08s linear; }
 #pitchMeter span { position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%); color:#d8c7aa; font:700 9px/1 ui-sans-serif,system-ui,sans-serif; letter-spacing:.08em; writing-mode:vertical-rl; }
-#hitFlash { position:absolute; inset:0; pointer-events:none; opacity:0; background:radial-gradient(ellipse at center,transparent 45%,rgba(160,22,14,.38)); transition:opacity .1s; }
+#hitFlash { position:absolute; inset:0; pointer-events:none; opacity:0; background:radial-gradient(ellipse at center,transparent 43%,rgba(160,22,14,.48)); transition:opacity .12s; }
+#hitFlash.is-hit { animation:hitPulse .32s ease-out; }
+#damageArrow { position:absolute; left:50%; top:50%; width:0; height:0; border-left:10px solid transparent; border-right:10px solid transparent; border-bottom:22px solid #f08a6b; filter:drop-shadow(0 0 7px rgba(104,16,10,.9)); opacity:0; pointer-events:none; transition:opacity .08s; }
+#damageArrow.is-hit { opacity:.92; }
+@keyframes hitPulse { 0% { opacity:0; } 28% { opacity:1; } 100% { opacity:0; } }
 #guide { position:absolute; z-index:2; top:calc(max(18px, env(safe-area-inset-top)) + 78px); left:50%; transform:translateX(-50%); width:min(520px,calc(100% - 32px)); padding:10px 14px; text-align:center; background:rgba(11,13,11,.78); border:1px solid rgba(233,203,143,.38); color:#efe3cd; box-shadow:0 6px 24px rgba(0,0,0,.32); pointer-events:none; backdrop-filter:blur(5px); font-size:14px; }
 #guide b { color:#e1b471; margin-right:10px; font-size:11px; letter-spacing:.15em; }
 .portrait { float:left; width:42px; height:52px; margin:-13px 8px -8px -5px; object-fit:cover; object-position:50% 6%; filter:drop-shadow(0 2px 3px #000); }
