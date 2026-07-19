@@ -17,11 +17,11 @@
         <div class="hud-top">
           <div class="brand"><span>VERDUN</span><strong>沃堡守备战</strong></div>
           <div class="objective"><span>目标</span><strong id="objectiveText">夺回 · 弹药库</strong><i><b id="captureFill"></b></i></div>
-          <button id="viewButton" class="view-button" type="button" aria-label="切换视角">第一人称</button>
+          <div class="hud-actions"><button id="weaponButton" class="view-button" type="button">武器库</button><button id="viewButton" class="view-button" type="button" aria-label="切换视角">第一人称</button></div>
         </div>
         <div class="hud-bottom">
           <div class="vital"><img class="portrait" src="assets/french-poilu.png" alt="1916 年法军步兵"><span>生命</span><div><b id="healthFill"></b></div><strong id="healthText">100</strong></div>
-          <div class="ammo"><span>勒贝尔步枪</span><strong><b id="ammoText">5</b> <em>/ <i id="reserveText">25</i></em></strong><small id="reloadState">可射击</small></div>
+          <div class="ammo"><span id="weaponName">勒贝尔步枪</span><strong><b id="ammoText">5</b> <em>/ <i id="reserveText">25</i></em></strong><small id="reloadState">可射击</small><small id="weaponStats">5 发 · 190 发/分</small></div>
           <div class="status" id="statusText">雨水敲击着沃堡的石墙。</div>
         </div>
       </section>
@@ -30,6 +30,13 @@
       <div id="pitchMeter" aria-label="瞄准仰角"><i id="pitchNeedle"></i><span>仰角</span></div>
       <div id="hitFlash" aria-hidden="true"></div>
       <div id="damageArrow" aria-hidden="true"></div>
+
+      <section id="weaponPanel" class="weapon-panel is-hidden" aria-label="选择武器">
+        <div><p class="eyebrow">携行武器</p><strong>选择主武器</strong><button id="closeWeapons" type="button" aria-label="关闭武器库">×</button></div>
+        <button data-weapon="lebel" class="weapon-choice is-selected" type="button"><b>勒贝尔 M1886</b><span>5 发弹仓 · 190 发/分 · 高伤害</span></button>
+        <button data-weapon="chauchat" class="weapon-choice" type="button"><b>绍沙轻机枪</b><span>20 发弹匣 · 420 发/分 · 压制火力</span></button>
+        <button data-weapon="carbine" class="weapon-choice" type="button"><b>贝蒂埃卡宾枪</b><span>8 发弹仓 · 330 发/分 · 均衡</span></button>
+      </section>
 
       <section id="touchControls" aria-label="触摸控制">
         <div id="joystick" class="joystick" role="application" aria-label="移动摇杆"><i id="stick"></i></div>
